@@ -2,6 +2,9 @@
 	import '@picocss/pico';
 	import PageTransition from '$lib/PageTransition.svelte';
 	import { navigating } from '$app/stores';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 
 	$: navigate = ($navigating?.from !== $navigating?.to).toString();
 </script>
@@ -10,15 +13,30 @@
 	<title>SvelteKit CRUD</title>
 </svelte:head>
 
-<PageTransition trigger={navigate}>
-	<div class="container">
-		<hgroup>
-			<h1>
-				<a href="/"> SvelteKit CRUD 🔥</a>
-			</h1>
+<div class="container">
+	<nav>
+		<ul>
+			<li>
+				<strong>
+					<a href="/">SvelteKit CRUD</a>
+				</strong>
+			</li>
+		</ul>
+		<ul>
+			<form method="POST">
+				{#if !data.user}
+					<li><a href="/register">Register</a></li>
+					<li><a href="/login">Login</a></li>
+				{:else}
+					<li>
+						<button formaction="/logout" type="submit">Logout</button>
+					</li>
+				{/if}
+			</form>
+		</ul>
+	</nav>
 
-			<h2>Built with SvelteKit & Prisma.</h2>
-		</hgroup>
+	<PageTransition trigger={navigate}>
 		<slot />
-	</div>
-</PageTransition>
+	</PageTransition>
+</div>

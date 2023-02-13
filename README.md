@@ -1,4 +1,5 @@
 npx prisma db push
+npx prisma generate
 
 # create-svelte
 

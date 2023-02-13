@@ -2,8 +2,13 @@ import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
 import { error, fail, redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ params }) => {
-	const getArticle = async () => {
+export const load: PageServerLoad = async ({ params, locals }) => {
+	const { user, session } = await locals.validateUser();
+	if (!(user && session)) {
+		throw error(401, 'Unauthorized');
+	}
+
+	const getArticle = async (userId: string) => {
 		const article = await prisma.article.findUnique({
 			where: {
 				id: Number(params.articleId)
@@ -12,22 +17,40 @@ export const load: PageServerLoad = async ({ params }) => {
 		if (!article) {
 			throw error(404, 'Article not found');
 		}
+		if (article.userId !== user.userId) {
+			throw error(403, 'Unauthorized');
+		}
+
 		return article;
 	};
 
 	return {
-		article: getArticle()
+		article: getArticle(user.userId)
 	};
 };
 
 export const actions: Actions = {
-	updateArticle: async ({ request, params }) => {
-		const { title, content } = Object.fromEntries(await request.formData()) as {
-			title: string;
-			content: string;
-		};
+	updateArticle: async ({ request, params, locals }) => {
+		const { user, session } = await locals.validateUser();
+		if (!(user && session)) {
+			throw error(401, 'Unauthorized');
+		}
+
+		const { title, content } = Object.fromEntries(await request.formData()) as Record<
+			string,
+			string
+		>;
 
 		try {
+			const article = await prisma.article.findUniqueOrThrow({
+				where: {
+					id: Number(params.articleId)
+				}
+			});
+
+			if (article.userId !== user.userId) {
+				throw error(403, 'Forbidden to edit this article.');
+			}
 			await prisma.article.update({
 				where: {
 					id: Number(params.articleId)
@@ -42,10 +65,6 @@ export const actions: Actions = {
 			return fail(500, { message: 'Could not update article' });
 		}
 
-		// return {
-		// 	status: 200
-		// };
-
-		throw redirect(303, '/');
+		throw redirect(302, '/');
 	}
 };
