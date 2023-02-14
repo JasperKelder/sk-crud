@@ -23,16 +23,16 @@
 			</li>
 		</ul>
 		<ul>
-			<form method="POST">
-				{#if !data.user}
-					<li><a href="/register">Register</a></li>
-					<li><a href="/login">Login</a></li>
-				{:else}
-					<li>
+			{#if !data.user}
+				<li><a href="/register">Register</a></li>
+				<li><a href="/login">Login</a></li>
+			{:else}
+				<li>
+					<form method="POST">
 						<button formaction="/logout" type="submit">Logout</button>
-					</li>
-				{/if}
-			</form>
+					</form>
+				</li>
+			{/if}
 		</ul>
 	</nav>
 

@@ -12,6 +12,7 @@
 <div class="grid">
 	<div>
 		<h2>Articles</h2>
+
 		{#each articles as article (article.id)}
 			<article
 				in:fade={{ duration: 400 }}
@@ -22,6 +23,7 @@
 				<p>
 					{article.content}
 				</p>
+
 				{#if article.userId === data.user?.userId}
 					<form action="?/deleteArticle&id={article.id}" method="POST" use:enhance>
 						<button type="submit" class="outline secondary">Delete Article</button>
@@ -33,13 +35,17 @@
 			</article>
 		{/each}
 	</div>
+
 	{#if data.user}
 		<form action="?/createArticle" method="POST" use:enhance>
 			<h3>New Article</h3>
+
 			<label for="title">Title</label>
 			<input type="text" id="title" name="title" />
+
 			<label for="title">Content</label>
 			<textarea id="content" name="content" rows={5} />
+
 			<button type="submit">Add Article</button>
 		</form>
 	{/if}
