@@ -1,9 +1,6 @@
-<form method="POST">
-	<hgroup>
-		<h2>Register</h2>
-		<h3>To post articles, you'll need an account.</h3>
-	</hgroup>
+<h1>Register</h1>
 
+<form method="POST">
 	<label for="name">Name</label>
 	<input type="text" id="name" name="name" required />
 
@@ -15,4 +12,5 @@
 
 	<button type="submit">Register</button>
 </form>
+
 <p>Already have an account? <a href="/login">Login</a></p>

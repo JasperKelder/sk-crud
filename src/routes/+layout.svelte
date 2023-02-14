@@ -40,3 +40,9 @@
 		<slot />
 	</PageTransition>
 </div>
+
+<style>
+	nav {
+		min-height: 7rem;
+	}
+</style>

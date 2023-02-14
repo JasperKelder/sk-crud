@@ -1,8 +1,6 @@
+<h1>Login</h1>
+
 <form method="POST">
-	<hgroup>
-		<h2>Login</h2>
-		<h3>Welcome back!</h3>
-	</hgroup>
 	<label for="username">Username</label>
 	<input type="text" id="username" name="username" required />
 
@@ -11,4 +9,5 @@
 
 	<button type="submit">Login</button>
 </form>
+
 <p>Don't have an account? <a href="/register">Register</a></p>
